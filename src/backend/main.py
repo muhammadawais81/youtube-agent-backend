@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel
 from .agents import process_video
 from .schemas import AnalyzeRequest, AnalyzeResponse
@@ -88,5 +88,10 @@ async def analyze_video(payload: AnalyzeRequest):
             status_code=500, 
             detail="An unexpected error occurred while processing the video. Please try again later."
         )
+
+@app.get("/", include_in_schema=False)
+async def root():
+    """Redirect to API documentation"""
+    return RedirectResponse(url="/docs")
 
 
